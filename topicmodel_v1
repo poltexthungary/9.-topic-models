@@ -42,30 +42,64 @@ findFreqTerms(adtm,250)
 
 # 5. topic modellezés, két topicra, 10 topicra, 20 topicra 
 
-adtm_lda <- LDA(adtm, k = 2, control = list(seed = 1234))
-adtm_topics <- tidy(adtm_lda, matrix = "beta")
-adtm_topics
+adtm_lda2 <- LDA(adtm, k = 2, control = list(seed = 1234))
+adtm_topics2 <- tidy(adtm_lda, matrix = "beta")
+adtm_topics2
 
-adtm_lda <- LDA(adtm, k = 10, control = list(seed = 1234))
-adtm_topics <- tidy(adtm_lda, matrix = "beta")
-adtm_topics
+adtm_lda10 <- LDA(adtm, k = 10, control = list(seed = 1234))
+adtm_topics10 <- tidy(adtm_lda, matrix = "beta")
+adtm_topics10
 
-adtm_lda <- LDA(adtm, k = 20, control = list(seed = 1234))
-adtm_topics <- tidy(adtm_lda, matrix = "beta")
-adtm_topics
+adtm_lda20 <- LDA(adtm, k = 20, control = list(seed = 1234))
+adtm_topics20 <- tidy(adtm_lda, matrix = "beta")
+adtm_topics20
 
 
 # 6. vizualizáció
 
-ap_top_terms <- ap_topics %>%
+# 6a. vizualizáció k=2
+
+adtm_top_terms2 <- adtm_topics2 %>%
   group_by(topic) %>%
   top_n(10, beta) %>%
   ungroup() %>%
   arrange(topic, -beta)
 
-ap_top_terms %>%
+adtm_top_terms2 %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip()
+  
+  # 6b. vizualizáció k=10
+
+adtm_top_terms10 <- adtm_topics10 %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+adtm_top_terms10 %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip()
+
+# 6c. vizualizáció k=20
+
+adtm_top_terms20 <- adtm_topics20 %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+adtm_top_terms20 %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip()
+
+
