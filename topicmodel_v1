@@ -11,8 +11,9 @@ library(dplyr)
 # 2. adatok behívása
 
 dir.create("outputs")
-a  <-Corpus(DirSource("/Users/nabinoir/Dropbox/inbox/law05"), readerControl = list(language="hu")) 
-summary(a)  #check what went in
+files <- DirSource(directory="E:/Dropbox/inbox/law", encoding="utf-8")
+fajlokbol_corpus <- Corpus(x=files)
+summary(fajlokbol_corpus) #ellenorzes
 
 # 3. adattisztítás
 
