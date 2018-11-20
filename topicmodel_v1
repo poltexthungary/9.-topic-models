@@ -1,5 +1,3 @@
-# 1. könyvtárak behívása
-
 library(tm)
 library(wordcloud)
 library(RColorBrewer)
@@ -29,7 +27,6 @@ a <- tm_map(a, content_transformer(tolower))
 
 # hozzuk letre a dtm-et
 adtm <-DocumentTermMatrix(a) 
-# ha szükséges: adtm <- removeSparseTerms(adtm, 0.75)
 
 # nezzunk bele az elso harom sor 20-30. oszlopanak ertekeibe
 inspect(adtm[1:3, 20:30])
@@ -40,24 +37,12 @@ View(as.matrix(adtm[1:3, 20:30]))
 # nezzuk meg a legalabb 250-szer szereplo kifejezeseket
 findFreqTerms(adtm,250)
 
-# 5. topic modellezés, két topicra, 10 topicra, 20 topicra 
+# 5. topic modellezés és vizualizáció két topicra 
 
 adtm_lda2 <- LDA(adtm, k = 2, control = list(seed = 1234))
-adtm_topics2 <- tidy(adtm_lda, matrix = "beta")
+adtm_topics2 <- tidy(adtm_lda2, matrix = "beta")
 adtm_topics2
 
-adtm_lda10 <- LDA(adtm, k = 10, control = list(seed = 1234))
-adtm_topics10 <- tidy(adtm_lda, matrix = "beta")
-adtm_topics10
-
-adtm_lda20 <- LDA(adtm, k = 20, control = list(seed = 1234))
-adtm_topics20 <- tidy(adtm_lda, matrix = "beta")
-adtm_topics20
-
-
-# 6. vizualizáció
-
-# 6a. vizualizáció k=2
 
 adtm_top_terms2 <- adtm_topics2 %>%
   group_by(topic) %>%
@@ -71,8 +56,15 @@ adtm_top_terms2 %>%
   geom_col(show.legend = FALSE) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip()
-  
-  # 6b. vizualizáció k=10
+
+
+
+# 6. topic modellezés és vizualizáció 10 topicra 
+
+
+adtm_lda10 <- LDA(adtm, k = 10, control = list(seed = 1234))
+adtm_topics10 <- tidy(adtm_lda10, matrix = "beta")
+adtm_topics10
 
 adtm_top_terms10 <- adtm_topics10 %>%
   group_by(topic) %>%
@@ -87,7 +79,14 @@ adtm_top_terms10 %>%
   facet_wrap(~ topic, scales = "free") +
   coord_flip()
 
-# 6c. vizualizáció k=20
+
+# 7. topic modellezés és vizualizáció 20 topicra 
+
+
+adtm_lda20 <- LDA(adtm, k = 20, control = list(seed = 1234))
+adtm_topics20 <- tidy(adtm_lda20, matrix = "beta")
+adtm_topics20
+
 
 adtm_top_terms20 <- adtm_topics20 %>%
   group_by(topic) %>%
@@ -101,5 +100,8 @@ adtm_top_terms20 %>%
   geom_col(show.legend = FALSE) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip()
+
+
+
 
 
